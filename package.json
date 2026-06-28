@@ -1,0 +1,14 @@
+{
+  "name": "aiep-educator-skills",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Framework docente AIEP: skills de agente + tooling compartido (fuente única de verdad).",
+  "workspaces": [
+    "packages/slides-system",
+    "cli"
+  ],
+  "scripts": {
+    "build": "npm run build -w slides-system && npm run build -w aiep-skills",
+    "test:all": "npm run test:all -w slides-system && npm run test:all -w aiep-skills"
+  }
+}
