@@ -1,12 +1,11 @@
 # aiep-educator-skills
 
-> Soy Diego Obando, analista programador titulado y docente en AIEP (Osorno, Chile). Este framework
-> nació de mi propia experiencia haciendo clases: siendo programador, terminé construyendo la
-> infraestructura que necesitaba para enseñar. Lo que empezó como un puñado de scripts y plantillas
-> para preparar mis cursos —diseñar clases, armar presentaciones con la identidad de la institución,
-> generar material de apoyo— se fue volviendo un sistema reutilizable y consistente. Lo formalicé
-> aquí para tener una sola fuente de verdad y, de paso, para que cualquier docente o agente de IA
-> pueda planificar con el mismo estándar.
+> Esta herramienta surgió de forma natural de mi trabajo como docente en AIEP. Soy programador, así
+> que ante una tarea repetitiva reaccioné como de costumbre: construir la infraestructura para
+> resolverla bien una sola vez. Lo que empezaron siendo scripts y plantillas sueltas para mis
+> propios cursos se fue consolidando en un sistema coherente; este repositorio lo formaliza como una
+> única fuente de verdad, pensada para que cualquier docente —o agente de IA— planifique con el
+> mismo estándar.
 
 **aiep-educator-skills** es un framework docente: un conjunto de **skills de agente** + **tooling
 compartido** para producir material de AIEP (clases, evaluaciones, comunicación, decks, infografías,
