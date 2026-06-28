@@ -1,0 +1,38 @@
+name: Publish
+
+# Publica el CLI en npm cuando se publica un Release en GitHub.
+# Requisito: un secret de repo NPM_TOKEN (token "Automation" de npm).
+# La versión publicada se toma del tag del release (ej. tag v0.2.0 -> 0.2.0).
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: "https://registry.npmjs.org"
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Gates antes de publicar
+        run: npm run test:all
+
+      - name: Versionar desde el tag del release
+        run: npm version --no-git-tag-version --allow-same-version "${GITHUB_REF_NAME#v}" --workspace aiep-skills
+
+      - name: Publish (prepack arma build + bundle del framework)
+        run: npm publish --workspace aiep-skills
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

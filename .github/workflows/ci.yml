@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Gates (typecheck + build + tests + cspell)
+        run: npm run test:all
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Build validators (.NET)
+        run: |
+          dotnet build packages/pptx-validator -c Release
+          dotnet build packages/pbip-validator -c Release
+
+      - name: Verificar empaquetado del CLI (npm pack)
+        run: npm pack --workspace aiep-skills --dry-run

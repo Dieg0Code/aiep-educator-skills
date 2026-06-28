@@ -51,18 +51,29 @@ export function rmrf(target: string): void {
   fs.rmSync(target, { recursive: true, force: true });
 }
 
-/** Sube desde `start` hasta encontrar la raíz del framework (skills/ + packages/slides-system). */
+function isFrameworkRoot(dir: string): boolean {
+  return (
+    fs.existsSync(path.join(dir, "skills")) &&
+    fs.existsSync(path.join(dir, "packages", "slides-system"))
+  );
+}
+
+/**
+ * Encuentra la raíz del framework (skills/ + packages/slides-system) subiendo desde `start`.
+ * En un paquete publicado en npm los assets vienen empaquetados en `<paquete>/framework/`;
+ * en el monorepo de desarrollo están en la raíz del repo. Se prueban ambos en cada nivel.
+ */
 export function findFrameworkRoot(start: string): string {
   let dir = start;
   for (let i = 0; i < 8; i++) {
-    const hasSkills = fs.existsSync(path.join(dir, "skills"));
-    const hasSystem = fs.existsSync(path.join(dir, "packages", "slides-system"));
-    if (hasSkills && hasSystem) return dir;
+    const bundled = path.join(dir, "framework");
+    if (isFrameworkRoot(bundled)) return bundled; // paquete npm: <paquete>/framework/
+    if (isFrameworkRoot(dir)) return dir; // monorepo/dev: raíz del repo
     const parent = path.dirname(dir);
     if (parent === dir) break;
     dir = parent;
   }
   throw new Error(
-    "No se encontró la raíz del framework (un directorio con skills/ y packages/slides-system)."
+    "No se encontró la raíz del framework (skills/ + packages/slides-system, ni un framework/ empaquetado)."
   );
 }

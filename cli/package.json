@@ -1,19 +1,50 @@
 {
   "name": "aiep-skills",
   "version": "0.1.0",
-  "private": true,
+  "description": "CLI del framework docente AIEP: instala y actualiza skills de agente y tooling en un repo de curso o proyecto (init / sync).",
+  "keywords": [
+    "aiep",
+    "docencia",
+    "agent-skills",
+    "pptx",
+    "scaffolding",
+    "cli"
+  ],
+  "license": "MIT",
+  "author": "Diego Obando (Dieg0Code)",
+  "homepage": "https://github.com/Dieg0Code/aiep-educator-skills#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dieg0Code/aiep-educator-skills.git",
+    "directory": "cli"
+  },
+  "bugs": {
+    "url": "https://github.com/Dieg0Code/aiep-educator-skills/issues"
+  },
   "type": "commonjs",
-  "description": "CLI del framework AIEP: instala/actualiza skills y tooling en un repo de curso (copiar + lock).",
   "bin": {
     "aiep-skills": "./dist/index.js"
   },
+  "files": [
+    "dist",
+    "framework",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "build": "tsup",
+    "bundle": "node scripts/bundle-framework.mjs",
     "dev": "tsx src/index.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:text": "cspell lint --config cspell.json \"src/**/*.ts\" \"tests/**/*.ts\"",
-    "test:all": "npm run typecheck && npm run build && npm run test && npm run test:text"
+    "test:all": "npm run typecheck && npm run build && npm run test && npm run test:text",
+    "prepack": "npm run build && npm run bundle"
   },
   "devDependencies": {
     "@cspell/dict-es-es": "^2.3.0",

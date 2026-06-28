@@ -1,5 +1,8 @@
 # aiep-educator-skills
 
+[![CI](https://github.com/Dieg0Code/aiep-educator-skills/actions/workflows/ci.yml/badge.svg)](https://github.com/Dieg0Code/aiep-educator-skills/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/aiep-skills.svg)](https://www.npmjs.com/package/aiep-skills)
+
 > Esta herramienta surgió de forma natural de mi trabajo como docente en AIEP. Soy programador, así
 > que ante una tarea repetitiva reaccioné como de costumbre: construir la infraestructura para
 > resolverla bien una sola vez. Lo que empezaron siendo scripts y plantillas sueltas para mis
@@ -15,28 +18,32 @@ No es una colección de skills sueltas: es un **flujo** y un **sistema visual** 
 contextos. Lo que cambia entre tareas son tres ejes —**audiencia · formato · flujo**— sobre un
 patrón de repo compartido. El detalle del modelo está en [`docs/framework.md`](docs/framework.md).
 
-## Instalación
-
-Requiere Node 18+. Para los validadores de integridad, .NET 9.
-
-```bash
-git clone <este-repo> aiep-educator-skills
-cd aiep-educator-skills
-npm install      # instala workspaces (slides-system + CLI) y enlaza el binario aiep-skills
-npm run build    # compila el sistema de slides y el CLI
-```
-
 ## Uso (CLI `aiep-skills`)
+
+Requiere Node 18+. No hace falta clonar nada: el CLI lleva el framework empaquetado y se usa con
+`npx`. Para los validadores de integridad de `.pptx`/Power BI hace falta .NET 9.
 
 ```bash
 # Andamiar un repo de curso/proyecto nuevo (estructura + onboarding + skills/tooling):
-npx aiep-skills init  <ruta-del-repo>              # módulo de clases
-npx aiep-skills init  <ruta-del-repo> --talleres   # proyecto (con reuniones VcM)
+npx aiep-skills init  "<ruta-del-repo>"              # módulo de clases
+npx aiep-skills init  "<ruta-del-repo>" --talleres   # proyecto (con reuniones VcM)
 
 # Instalar/actualizar las skills y el tooling en un repo existente:
-npx aiep-skills sync  <ruta-del-repo>
-npx aiep-skills sync  <ruta-del-repo> --dry-run    # ver qué haría, sin escribir
-npx aiep-skills sync  <ruta-del-repo> --force      # sobrescribir ediciones locales
+npx aiep-skills sync  "<ruta-del-repo>"
+npx aiep-skills sync  "<ruta-del-repo>" --dry-run    # ver qué haría, sin escribir
+npx aiep-skills sync  "<ruta-del-repo>" --force      # sobrescribir ediciones locales
+```
+
+> Si la ruta tiene espacios, encerrarla entre comillas (ej. `"C:\Users\Diego Obando\dev\mi-curso"`).
+
+### Desde el repositorio (desarrollo)
+
+```bash
+git clone https://github.com/Dieg0Code/aiep-educator-skills
+cd aiep-educator-skills
+npm install      # instala los workspaces (slides-system + CLI)
+npm run build    # compila el sistema de slides y el CLI
+npm run test:all # corre todos los gates
 ```
 
 - **`init`** crea el esqueleto (`docs/ cronograma/ clases|talleres/`), un `README.md` para el
@@ -82,3 +89,18 @@ copy-paste manual que antes mantenía varias copias idénticas a mano.
 `npm run test:all` corre los gates de ambos workspaces: typecheck, build, tests (slides-system y
 CLI) y revisión ortográfica (cspell). Los decks generados se validan además con `pptx-validator`
 (.NET) para garantizar que PowerPoint los abra sin reparar.
+
+## CI/CD
+
+- **CI** ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)): en cada push y PR a `master`
+  corre los gates (`npm run test:all`), compila los validadores .NET y verifica que el paquete del
+  CLI se empaquete bien.
+- **Publish** ([`.github/workflows/publish.yml`](.github/workflows/publish.yml)): al publicar un
+  **Release** en GitHub, compila, arma el bundle del framework y publica `aiep-skills` en npm.
+
+### Publicar una versión
+
+1. Crear un token **Automation** en npm y guardarlo como secret de repo `NPM_TOKEN`
+   (Settings → Secrets and variables → Actions).
+2. Crear un Release en GitHub con tag `vX.Y.Z` (ej. `v0.1.0`). El workflow toma la versión del tag
+   y publica. A partir de ahí, `npx aiep-skills@X.Y.Z` queda disponible para cualquiera.

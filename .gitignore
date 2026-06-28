@@ -10,6 +10,9 @@
 **/obj/
 *.bak
 
+# Bundle del framework generado en prepack (no versionar; se arma al publicar)
+cli/framework/
+
 # Previews de render de PPT (regenerables)
 **/ppt/rendered*/
 **/ppt/montage*.png
