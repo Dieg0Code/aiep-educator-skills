@@ -33,6 +33,7 @@
     "venv",
     "pycache",
     "regenerables",
-    "entregables"
+    "entregables",
+    "encerralo"
   ]
 }

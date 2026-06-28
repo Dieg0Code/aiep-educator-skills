@@ -47,6 +47,22 @@ function resolveTarget(arg: string | undefined): string {
   return path.resolve(arg ?? process.cwd());
 }
 
+/** Rechaza posicionales de más (típico: path con espacios sin comillas) y flags no reconocidas. */
+function validateArgs(positional: string[], flags: Set<string>, allowedFlags: string[]): string | null {
+  if (positional.length > 1) {
+    return (
+      `Demasiados argumentos (${positional.length}): ${positional.join(" | ")}. ` +
+      `Si el destino tiene espacios, encerralo en comillas.`
+    );
+  }
+  for (const flag of flags) {
+    if (!allowedFlags.includes(flag)) {
+      return `Flag desconocida para este comando: ${flag}. Permitidas: ${allowedFlags.join(", ") || "(ninguna)"}.`;
+    }
+  }
+  return null;
+}
+
 export function main(argv: string[]): number {
   const args = argv.slice(2);
   const command = args[0];
@@ -62,6 +78,11 @@ export function main(argv: string[]): number {
   const version = frameworkVersion(frameworkRoot);
 
   if (command === "sync") {
+    const err = validateArgs(positional, flags, ["--dry-run", "--force"]);
+    if (err) {
+      console.error(err);
+      return 1;
+    }
     const target = resolveTarget(positional[0]);
     const dryRun = flags.has("--dry-run");
     const force = flags.has("--force");
@@ -74,6 +95,11 @@ export function main(argv: string[]): number {
   }
 
   if (command === "init") {
+    const err = validateArgs(positional, flags, ["--talleres"]);
+    if (err) {
+      console.error(err);
+      return 1;
+    }
     const target = resolveTarget(positional[0]);
     const kind: RepoKind = flags.has("--talleres") ? "talleres" : "clases";
     console.log(`aiep-skills init (${kind})  destino: ${target}\n`);
