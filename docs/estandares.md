@@ -165,5 +165,9 @@ En proyectos con hardware/secretos también: `.pio/`, `.env*`, `*.token`, `*.key
 Cada repo lleva su `AGENTS.md` (Codex) y `CLAUDE.md` (Claude) con: propósito, público objetivo,
 estructura, jerarquía de verdad, reglas de contenido y flujo de validación. La mayoría de esas
 reglas son **estándar del framework** (este documento); el `AGENTS.md` del repo solo agrega lo
-específico del módulo/proyecto. El CLI puede generar un `AGENTS.md`/`CLAUDE.md` base que referencie
-estos estándares en vez de repetirlos.
+específico del módulo/proyecto.
+
+`aiep-skills init` genera de entrada un `README.md` (para el docente), un `AGENTS.md` y un
+`CLAUDE.md` base, en español neutro, que **referencian** estos estándares y `docs/audiencias.md` en
+vez de repetirlos. Así un docente o un agente que llega frío al repo tiene contexto suficiente para
+trabajar sin leer el framework entero.

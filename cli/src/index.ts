@@ -38,7 +38,7 @@ function printResults(results: SyncResult[]): void {
   if (skipped.length > 0) {
     console.log(
       `\n  Aviso: ${skipped.length} ítem(s) con cambios locales no se sobrescribieron. ` +
-        `Usá --force para reemplazarlos con la versión del framework.`
+        `Usar --force para reemplazarlos con la versión del framework.`
     );
   }
 }
@@ -52,7 +52,7 @@ function validateArgs(positional: string[], flags: Set<string>, allowedFlags: st
   if (positional.length > 1) {
     return (
       `Demasiados argumentos (${positional.length}): ${positional.join(" | ")}. ` +
-      `Si el destino tiene espacios, encerralo en comillas.`
+      `Si el destino tiene espacios, debe ir entre comillas.`
     );
   }
   for (const flag of flags) {
